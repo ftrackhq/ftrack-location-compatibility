@@ -30,6 +30,16 @@ def setup(event):
         )
     )
 
+    location_compatibility_source_path = os.path.normpath(
+        os.path.join(
+            ftrack_location_compatibility.__file__,
+            '..',
+            '..',
+            '..',
+            'source'
+        )
+    )
+
     location_compatibility_hook_path = os.environ.get(
         'FTRACK_LOCATION_COMPATIBILITY_PLUGIN_PATH',
         _location_compatibility_hook_path
@@ -38,6 +48,12 @@ def setup(event):
     ftrack_connect.application.appendPath(
         location_compatibility_hook_path,
         'FTRACK_EVENT_PLUGIN_PATH',
+        environment
+    )
+
+    ftrack_connect.application.appendPath(
+        location_compatibility_source_path,
+        'PYTHONPATH',
         environment
     )
 
