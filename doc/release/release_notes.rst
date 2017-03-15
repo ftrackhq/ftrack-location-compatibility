@@ -6,6 +6,12 @@
 *************
 Release Notes
 *************
+.. release:: Upcoming
+
+    .. change:: fixed
+        :tags: hook
+
+        Add source folder to PYTHONPATH.
 
 .. release:: 0.1.0
     :date: 2017-01-19
