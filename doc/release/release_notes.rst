@@ -6,6 +6,7 @@
 *************
 Release Notes
 *************
+
 .. release:: Upcoming
 
     .. change:: fixed
