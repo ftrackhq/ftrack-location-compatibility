@@ -7,6 +7,12 @@
 Release Notes
 *************
 
+.. release:: Upcoming
+
+    .. change:: new
+
+        Provide build_plugin command to produce redistributable builds.
+
 .. release:: 0.1.0
     :date: 2017-01-19
 
