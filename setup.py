@@ -46,14 +46,17 @@ with open(os.path.join(
 
 class BuildPlugin(Command):
     '''Build plugin.'''
+
     description = 'Download dependencies and build plugin .'
 
     user_options = []
 
     def initialize_options(self):
+        '''Initialize options.'''
         pass
 
     def finalize_options(self):
+        '''Finalize options.'''
         pass
 
     def run(self):
@@ -73,7 +76,7 @@ class BuildPlugin(Command):
                 'install',
                 '.',
                 '--target',
-                os.path.join(STAGING_PATH, 'dependencies'),
+                os.path.join(STAGING_PATH, 'package'),
                 '--process-dependency-links'
             ]
         )
