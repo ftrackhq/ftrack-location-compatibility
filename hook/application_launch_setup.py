@@ -34,7 +34,7 @@ def setup(event):
         os.path.join(
             ftrack_location_compatibility.__file__,
             '..',
-            'dependencies'
+            'package'
         )
     )
 

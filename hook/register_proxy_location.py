@@ -12,7 +12,7 @@ try:
     import ftrack_location_compatibility
 except ImportError:
     dependencies_path = os.path.realpath(
-        os.path.join(os.path.dirname(__file__), '..', 'dependencies')
+        os.path.join(os.path.dirname(__file__), '..', 'package')
     )
     sys.path.append(dependencies_path)
     import ftrack_location_compatibility
