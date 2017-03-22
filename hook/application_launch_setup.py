@@ -30,6 +30,20 @@ def setup(event):
         )
     )
 
+    ftrack_location_compatibility_path = os.path.dirname(
+        os.path.join(
+            ftrack_location_compatibility.__file__,
+            '..',
+            'dependencies'
+        )
+    )
+
+    ftrack.application.appendPath(
+        ftrack_location_compatibility_path,
+        'PYTHONPATH',
+        environment
+    )
+
     location_compatibility_hook_path = os.environ.get(
         'FTRACK_LOCATION_COMPATIBILITY_PLUGIN_PATH',
         _location_compatibility_hook_path
@@ -40,6 +54,8 @@ def setup(event):
         'FTRACK_EVENT_PLUGIN_PATH',
         environment
     )
+
+    print 'ENV', environment
 
 
 def register(registry, **kw):
