@@ -55,8 +55,6 @@ def setup(event):
         environment
     )
 
-    print 'ENV', environment
-
 
 def register(registry, **kw):
     '''Register hooks.'''
