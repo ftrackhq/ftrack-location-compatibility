@@ -5,6 +5,7 @@ import sys
 import os
 import logging
 import ftrack
+import ftrack_connect.application
 
 try:
     import ftrack_location_compatibility
@@ -41,7 +42,7 @@ def setup(event):
         )
     )
 
-    ftrack.application.appendPath(
+    ftrack_connect.application.appendPath(
         ftrack_location_compatibility_path,
         'PYTHONPATH',
         environment
