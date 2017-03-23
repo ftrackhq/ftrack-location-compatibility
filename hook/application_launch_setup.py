@@ -29,13 +29,13 @@ def setup(event):
 
     environment = event['data']['options']['env']
 
-    _location_compatibility_hook_path = os.path.normpath(
+    _location_compatibility_hook_path = os.path.abspath(
         os.path.dirname(__file__)
     )
 
-    ftrack_location_compatibility_path = os.path.dirname(
+    ftrack_location_compatibility_path = os.path.abspath(
         os.path.join(
-            ftrack_location_compatibility.__file__,
+            os.path.dirname(ftrack_location_compatibility.__file__),
             '..',
             'package'
         )
