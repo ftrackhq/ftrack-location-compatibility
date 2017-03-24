@@ -7,13 +7,16 @@
 Release Notes
 *************
 
-.. release:: Upcoming
+.. release:: 0.2.0
+    :date: 2017-03-24
 
     .. change:: fixed
+        :tags: performance
 
         Registering legacy locations are very slow.
 
     .. change:: new
+        :tags: build
 
         Provide build_plugin command to produce redistributable builds.
 
@@ -21,5 +24,6 @@ Release Notes
     :date: 2017-01-19
 
     .. change:: new
+        :tags: location, compatibility
 
         Initial release of ftrack location compatibility.
