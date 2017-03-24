@@ -1,11 +1,21 @@
 # :coding: utf-8
 # :copyright: Copyright (c) 2016 ftrack
 
+import sys
 import os
 import logging
 import ftrack
+import ftrack_connect.application
 
-import ftrack_location_compatibility
+try:
+    import ftrack_location_compatibility
+except ImportError:
+    dependencies_path = os.path.realpath(
+        os.path.join(os.path.dirname(__file__), '..', 'package')
+    )
+    sys.path.append(dependencies_path)
+    import ftrack_location_compatibility
+
 import ftrack_connect.application
 
 logger = logging.getLogger(
@@ -20,14 +30,22 @@ def setup(event):
 
     environment = event['data']['options']['env']
 
-    _location_compatibility_hook_path = os.path.normpath(
+    _location_compatibility_hook_path = os.path.abspath(
+        os.path.dirname(__file__)
+    )
+
+    ftrack_location_compatibility_path = os.path.abspath(
         os.path.join(
-            ftrack_location_compatibility.__file__,
+            os.path.dirname(ftrack_location_compatibility.__file__),
             '..',
-            '..',
-            '..',
-            'hook'
+            'package'
         )
+    )
+
+    ftrack_connect.application.appendPath(
+        ftrack_location_compatibility_path,
+        'PYTHONPATH',
+        environment
     )
 
     location_compatibility_hook_path = os.environ.get(
