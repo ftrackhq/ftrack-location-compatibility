@@ -9,6 +9,10 @@ Release Notes
 
 .. release:: Upcoming
 
+    .. change:: fixed
+
+        Registering legacy locations are very slow.
+
     .. change:: new
 
         Provide build_plugin command to produce redistributable builds.
