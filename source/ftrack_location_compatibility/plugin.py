@@ -194,14 +194,14 @@ class ProxyLegacyLocationMixin(object):
 
 def register_locations(session):
     '''Register proxy locations.'''
-
     for location in session.query('select name from Location'):
         if location.accessor:
             # Location already configured.
             continue
 
-        legacy_location = ftrack.Location(location['name'])
-        if not legacy_location.getAccessor():
+        legacy_location = ftrack.LOCATION_PLUGINS.get(location['name'])
+
+        if legacy_location is None or not legacy_location.getAccessor():
             # Not configured in the legacy location either.
             continue
 
