@@ -107,10 +107,10 @@ class ProxyStructure(ftrack_api.structure.base.Structure):
 
     def get_resource_identifier(self, entity, context=None):
         '''Return resource identifier from *entity*.'''
-        if context is not None:
+        if context and context.keys() != ['source_resource_identifier']:
             logger.warning(
                 'Legacy api does not support passing context to a structure, '
-                'and {0!r} will be dropped.'
+                'and {0!r} will be dropped.'.format(context)
             )
 
         component = ftrack.Component(entity['id'])
