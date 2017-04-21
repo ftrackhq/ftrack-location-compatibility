@@ -8,6 +8,10 @@ Release Notes
 *************
 
 .. release:: Upcoming
+    
+    .. change:: fixed
+
+        Legacy API's unmanaged location do not translate the path using ftrack disks.
 
     .. change:: fixed
 
