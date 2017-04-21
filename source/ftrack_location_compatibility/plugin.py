@@ -196,7 +196,10 @@ class ProxyLegacyLocationMixin(object):
 def register_locations(session):
     '''Register proxy locations.'''
     for location in session.query('select name from Location'):
-        if location.accessor:
+        if (
+            location.accessor and
+            not isinstance(location, ProxyLegacyLocationMixin)
+        ):
             # Location already configured.
             continue
 
@@ -213,18 +216,10 @@ def register_locations(session):
             u'ftrack-python-api location.'.format(location['name'], session)
         )
 
-        # If the legacy location is unamanaged,
-        # mix in with UnmanagedLocationMixin.
-        if isinstance(legacy_location, ftrack_api.location.UnmanagedLocation):
-            ftrack_api.mixin(
-                location, ftrack_api.entity.location.UnmanagedLocationMixin,
-                'UnmanagedProxyLegacyLocation'
-            )
-        else:
-            ftrack_api.mixin(
-                location, ProxyLegacyLocationMixin,
-                'ProxyLegacyLocation'
-            )
+        ftrack_api.mixin(
+            location, ProxyLegacyLocationMixin,
+            'ProxyLegacyLocation'
+        )
 
         location.priority = legacy_location.getPriority()
         location.accessor = ProxyAccessor(legacy_location.getAccessor())
