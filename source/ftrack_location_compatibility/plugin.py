@@ -198,7 +198,10 @@ def register_locations(session):
     for location in session.query('select name from Location'):
         if (
             location.accessor and
-            not isinstance(location, ProxyLegacyLocationMixin)
+            not isinstance(
+                location,
+                ftrack_api.entity.location.UnmanagedLocationMixin
+            )
         ):
             # Location already configured.
             continue
