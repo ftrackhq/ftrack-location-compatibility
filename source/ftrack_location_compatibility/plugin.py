@@ -195,7 +195,7 @@ class ProxyLegacyLocationMixin(object):
 
 def register_locations(session):
     '''Register proxy locations.'''
-    for location in session.query('select name from Location'):
+    for location in session.query('select name from Location').all():
         if (
             location.accessor and
             not isinstance(
