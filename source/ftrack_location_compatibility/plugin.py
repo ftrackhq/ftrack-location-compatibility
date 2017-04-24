@@ -198,10 +198,7 @@ def register_locations(session):
     for location in session.query('select name from Location').all():
         if (
             location.accessor and
-            not isinstance(
-                location,
-                ftrack_api.entity.location.UnmanagedLocationMixin
-            )
+            location['id'] is not ftrack_api.symbol.UNMANAGED_LOCATION_ID
         ):
             # Location already configured.
             continue
