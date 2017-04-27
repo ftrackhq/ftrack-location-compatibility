@@ -195,12 +195,12 @@ class ProxyLegacyLocationMixin(object):
 
 def register_locations(session):
     '''Register proxy locations.'''
-    for location in session.query('select name from Location')
+    for location in session.query('select name from Location'):
 
         '''
         Since the implementation in the new API does not
         translate paths between operating systems using ftrack disks
-        we mixin the proxy location with all the locatino which requires such a feature.
+        we mixin the proxy location with all the location which requires such a feature.
         '''
 
         if (
