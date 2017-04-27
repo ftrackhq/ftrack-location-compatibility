@@ -9,9 +9,10 @@ Release Notes
 
 .. release:: Upcoming
     
-    .. change:: fixed
+    .. change:: new
 
-        Legacy API's unmanaged location do not translate the path using ftrack disks.
+        Proxy the unmanaged location using the legacy API, since the implementation in the new API does not
+        translate paths between operating systems using ftrack disk
 
     .. change:: fixed
 
