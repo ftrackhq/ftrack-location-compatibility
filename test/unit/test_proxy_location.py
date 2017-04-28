@@ -1,3 +1,7 @@
+# :coding: utf-8
+# :copyright: Copyright (c) 2016 ftrack
+
+import datetime
 import os
 import platform
 import uuid
@@ -198,17 +202,25 @@ def test_unamanged_location(session):
     )
 
     test_disk = None
-    for project in session.query('select disk from Project'):
-        disk = project['disk']
+    for disk in session.query('select unix, windows from Disk'):
         if disk['unix'] and disk['windows'] and disk['unix'] != disk['windows']:
             test_disk = disk
             break
 
     assert test_disk
 
+    name = 'test-location-compatibility-' + str(uuid.uuid1())
+
+    project = session.create('Project', {
+        'full_name': name,
+        'name': name,
+        'start': datetime.date.today(),
+        'end': datetime.date.today() + datetime.timedelta(days=1)
+    })
+
     asset = session.create('Asset', {
         'context_id': project['id'],
-        'name': 'test-location-compatibility-' + str(uuid.uuid1()),
+        'name': name,
         'type': session.query('AssetType').first()
     })
     version = session.create('AssetVersion', {'asset': asset})
