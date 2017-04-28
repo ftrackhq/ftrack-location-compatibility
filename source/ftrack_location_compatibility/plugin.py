@@ -186,6 +186,7 @@ class ProxyLegacyLocationMixin(object):
         return resource_identifiers
 
     def add_components(self, *args, **kwargs):
+        '''Wrap add_components method with a commit.'''
         self.session.commit()
         original_method = types.MethodType(
             ftrack_api.entity.location.Location.add_components, self
@@ -197,12 +198,9 @@ def register_locations(session):
     '''Register proxy locations.'''
     for location in session.query('select name from Location'):
 
-        '''
-        Since the implementation in the new API does not
-        translate paths between operating systems using ftrack disks
-        we mixin the proxy location with all the location which requires such a feature.
-        '''
-
+        # The un-managed location in the ftrack-python-api does not translate
+        # disks between operating systems and must therefore be proxied to the
+        # legacy api to keep the same functionality.
         if (
             location.accessor and
             location['id'] is not ftrack_api.symbol.UNMANAGED_LOCATION_ID
