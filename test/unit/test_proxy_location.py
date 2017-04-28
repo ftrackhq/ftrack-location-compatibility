@@ -1,4 +1,5 @@
 import os
+import platform
 import uuid
 
 import pytest
@@ -171,3 +172,66 @@ def test_plugin_setup():
         location.accessor,
         ftrack_location_compatibility.plugin.ProxyAccessor
     )
+
+
+def test_origin_location(session):
+    '''Test that origin location is not proxied.'''
+    origin = session.query(
+        'Location where name is "ftrack.origin"'
+    ).one()
+
+    assert not isinstance(
+        origin.accessor,
+        ftrack_location_compatibility.plugin.ProxyAccessor
+    )
+
+
+def test_unamanged_location(session):
+    '''Test that the un-managed location is proxied.'''
+    location = session.query(
+        'Location where name is "ftrack.unmanaged"'
+    ).one()
+
+    assert isinstance(
+        location.accessor,
+        ftrack_location_compatibility.plugin.ProxyAccessor
+    )
+
+    test_disk = None
+    for project in session.query('select disk from Project'):
+        disk = project['disk']
+        if disk['unix'] and disk['windows'] and disk['unix'] != disk['windows']:
+            test_disk = disk
+            break
+
+    assert test_disk
+
+    asset = session.create('Asset', {
+        'context_id': project['id'],
+        'name': 'test-location-compatibility-' + str(uuid.uuid1()),
+        'type': session.query('AssetType').first()
+    })
+    version = session.create('AssetVersion', {'asset': asset})
+
+    session.commit()
+
+    # Allow testing on both windows and mac/linux platforms.
+    if platform.system() == 'Windows':
+        from_prefix = test_disk['unix']
+        to_prefix = test_disk['windows']
+    else:
+        from_prefix = test_disk['windows']
+        to_prefix = test_disk['unix']
+
+    path = os.path.normpath(
+        '{0}\\path\\to\\a\\file.png'.format(from_prefix)
+    )
+
+    component = session.create_component(
+        path=path,
+        data={'version': version},
+        location=location
+    )
+
+    translated_path = location.get_filesystem_path(component)
+    assert translated_path.startswith(to_prefix)
