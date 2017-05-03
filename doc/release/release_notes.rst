@@ -7,9 +7,11 @@
 Release Notes
 *************
 
-.. release:: Upcoming
+.. release:: 0.3.0
+    :date: 2017-04-03
     
     .. change:: new
+        :tags: location, compatibility
 
         Proxy the unmanaged location using the legacy API, since the
         ftrack-python-api does not translate paths between operating systems
