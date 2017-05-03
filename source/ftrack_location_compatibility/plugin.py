@@ -107,16 +107,42 @@ class ProxyStructure(ftrack_api.structure.base.Structure):
 
     def get_resource_identifier(self, entity, context=None):
         '''Return resource identifier from *entity*.'''
-        if context is not None:
+        if context and context.keys() != ['source_resource_identifier']:
             logger.warning(
                 'Legacy api does not support passing context to a structure, '
-                'and {0!r} will be dropped.'
+                'and {0!r} will be dropped.'.format(context)
             )
 
         component = ftrack.Component(entity['id'])
         return self._legacy_structure.getResourceIdentifier(
             component
         )
+
+
+class ProxyOriginStructure(ftrack_api.structure.base.Structure):
+    '''Proxy origin structure.'''
+
+    def __init__(self, legacy_structure):
+        '''Instantiate proxy with *legacy_structure*.'''
+        self._legacy_structure = legacy_structure
+        super(ProxyOriginStructure, self).__init__()
+
+    def get_resource_identifier(self, entity, context=None):
+        '''Return resource identifier from *entity*.'''
+        if context and context.keys() != ['source_resource_identifier']:
+            logger.warning(
+                'Legacy api does not support passing context to a structure, '
+                'and {0!r} will be dropped.'.format(context)
+            )
+
+        component = ftrack.Component(entity['id'])
+
+        if component.getResourceIdentifier():
+            return self._legacy_structure.getResourceIdentifier(
+                component
+            )
+        else:
+            return context['source_resource_identifier']
 
 
 class ProxyResourceIdentifierTransformer(
@@ -186,16 +212,25 @@ class ProxyLegacyLocationMixin(object):
         return resource_identifiers
 
     def add_components(self, *args, **kwargs):
+        '''Wrap add_components method with a commit.'''
         self.session.commit()
         original_method = types.MethodType(
             ftrack_api.entity.location.Location.add_components, self
         )
         return original_method(*args, **kwargs)
 
+
 def register_locations(session):
     '''Register proxy locations.'''
     for location in session.query('select name from Location'):
-        if location.accessor:
+
+        # The un-managed location in the ftrack-python-api does not translate
+        # disks between operating systems and must therefore be proxied to the
+        # legacy api to keep the same functionality.
+        if (
+            location.accessor and
+            location['id'] is not ftrack_api.symbol.UNMANAGED_LOCATION_ID
+        ):
             # Location already configured.
             continue
 
@@ -213,7 +248,8 @@ def register_locations(session):
         )
 
         ftrack_api.mixin(
-            location, ProxyLegacyLocationMixin, 'ProxyLegacyLocation'
+            location, ProxyLegacyLocationMixin,
+            'ProxyLegacyLocation'
         )
 
         location.priority = legacy_location.getPriority()
@@ -226,4 +262,13 @@ def register_locations(session):
                 )
                 location.resource_identifier_transformer = transformer
 
-        location.structure = ProxyStructure(legacy_location.getStructure())
+        if location['id'] is not ftrack_api.symbol.UNMANAGED_LOCATION_ID:
+            location.structure = ProxyStructure(legacy_location.getStructure())
+        else:
+            # The ftrack-python-api calls get_resource_identifier on the target
+            # location even if it is a un-managed location. This is not
+            # supported in the legacy api and must be handled with special
+            # logic
+            location.structure = ProxyOriginStructure(
+                legacy_location.getStructure()
+            )
