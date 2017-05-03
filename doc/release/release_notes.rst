@@ -8,6 +8,12 @@ Release Notes
 *************
 
 .. release:: Upcoming
+    
+    .. change:: new
+
+        Proxy the unmanaged location using the legacy API, since the
+        ftrack-python-api does not translate paths between operating systems
+        using ftrack disks.
 
     .. change:: fixed
 
