@@ -7,6 +7,14 @@
 Release Notes
 *************
 
+.. release:: Upcoming
+    
+    .. change:: fixed
+        :tags: logging
+
+        Incorrect logging output when setting up proxy for the unmanaged
+        location.
+
 .. release:: 0.3.0
     :date: 2017-04-03
     
