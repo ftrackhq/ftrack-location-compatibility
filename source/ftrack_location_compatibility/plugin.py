@@ -240,12 +240,20 @@ def register_locations(session):
             # Not configured in the legacy location either.
             continue
 
-        logger.warning(
-            u'Location {0!r} does not have a configured '
-            u'accessor configured in {1!r}. Setting up proxy for legacy '
-            u'api location. Consider rewriting this location to a '
-            u'ftrack-python-api location.'.format(location['name'], session)
-        )
+        if location['id'] is not ftrack_api.symbol.UNMANAGED_LOCATION_ID:
+            logger.warning(
+                u'Location {0!r} does not have a configured '
+                u'accessor configured in {1!r}. Setting up proxy for legacy '
+                u'api location. Consider rewriting this location to a '
+                u'ftrack-python-api location.'.format(location['name'], session)
+            )
+
+        else:
+            logger.info(
+                u'Proxying {0!r} location to the legacy api in order to support'
+                u'OS specific path translation.'.format(location['name'])
+            )
+
 
         ftrack_api.mixin(
             location, ProxyLegacyLocationMixin,
