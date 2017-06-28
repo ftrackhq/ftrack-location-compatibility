@@ -8,7 +8,14 @@ Release Notes
 *************
 
 .. release:: Upcoming
-    
+    .. change:: fixed
+        :tags: location, compatibility
+
+        If multiple `ftrack-python-api` sessions were created before
+        setup was called from the `ftrack-python-legacy-api` they were not
+        all updated with the proxied legacy locations.
+
+
     .. change:: fixed
         :tags: logging
 

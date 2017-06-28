@@ -9,6 +9,8 @@ logger = logging.getLogger(
 )
 
 def patch_legacy_api():
+    '''Patch the legacy setup function to allow being called multiple times.'''
+
     import ftrack
 
     functools.wraps(ftrack.EVENT_HUB.connect)
@@ -16,13 +18,9 @@ def patch_legacy_api():
         if ftrack.EVENT_HUB.connected:
             return
 
-        try:
-            return ftrack.EVENT_HUB._connect()
+        return ftrack.EVENT_HUB._connect()
 
-        except Exception as e:
-            raise e
-
-    # patch connect to not raise an exception if already connected
+    # Patch connect to not raise an exception if already connected
     ftrack.EVENT_HUB._connect = ftrack.EVENT_HUB.connect
     ftrack.EVENT_HUB.connect = connect
 
@@ -43,7 +41,7 @@ def patch_legacy_api():
             set(register.paths)
         )
 
-    # patch discover for LOCATION_PLUGINS and EVENT_HANDLERS in order to
+    # Patch discover for LOCATION_PLUGINS and EVENT_HANDLERS in order to
     # allow calling setup multiple times.
     for register in (ftrack.LOCATION_PLUGINS, ftrack.EVENT_HANDLERS):
         register._discover = register.discover
@@ -52,6 +50,6 @@ def patch_legacy_api():
             lambda x=register, **kwargs: discover(x, **kwargs)
         )
 
-    logger.warning(
+    logger.debug(
         'Patched legacy setup function to allow multiple calls.'
     )

@@ -26,7 +26,7 @@ def new_api_event_listener(event):
     session = event['data']['session']
 
     # Store session on cached module.
-    if session not in [r() for r in ftrack_location_compatibility.sessions]:
+    if session not in [ref() for ref in ftrack_location_compatibility.sessions]:
         ftrack_location_compatibility.sessions.append(
             weakref.ref(session)
         )
@@ -49,15 +49,14 @@ def legacy_location_registered():
             'Called by legacy and new api, continue and register locations.'''
         )
 
+        ftrack_location_compatibility.sessions = [
+            ref for ref in ftrack_location_compatibility.sessions if ref()
+        ]
+
         for session in [ref() for ref in ftrack_location_compatibility.sessions]:
             if session:
                 ftrack_location_compatibility.register_locations(
                     session
-                )
-
-            else:
-                ftrack_location_compatibility.remove(
-                    ref
                 )
 
     # Store legacy location registry information on cached module.
