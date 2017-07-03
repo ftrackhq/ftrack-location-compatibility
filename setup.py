@@ -5,7 +5,7 @@ import os
 import re
 import shutil
 import pip
-
+import glob
 from setuptools import setup, find_packages, Command
 from setuptools.command.test import test as TestCommand
 
@@ -140,8 +140,15 @@ configuration = dict(
             '#egg=lowdown-0.1.0'
         )
     ],
+
     options={},
-    zip_safe=False
+    zip_safe=False,
+    data_files=[
+        (
+            'hook',
+            glob.glob(os.path.join(HOOK_PATH, '*.py'))
+        )
+    ]
 )
 
 
