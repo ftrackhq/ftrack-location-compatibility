@@ -145,7 +145,7 @@ configuration = dict(
     zip_safe=False,
     data_files=[
         (
-            'ftrack-location-compatibility/hook',
+            'ftrack_location_compatibility/hook',
             glob.glob(os.path.join(HOOK_PATH, '*.py'))
         )
     ]
