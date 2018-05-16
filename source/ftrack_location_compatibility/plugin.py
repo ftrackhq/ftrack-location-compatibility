@@ -245,7 +245,7 @@ def register_locations(session):
             ftrack_api.symbol.CONNECT_LOCATION_ID
         ]
 
-        if location['id'] is not in excluded_locations:
+        if location['id'] not in excluded_locations:
             logger.warning(
                 u'Location {0!r} does not have a configured '
                 u'accessor configured in {1!r}. Setting up proxy for legacy '
