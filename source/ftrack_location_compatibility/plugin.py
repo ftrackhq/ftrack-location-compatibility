@@ -239,8 +239,13 @@ def register_locations(session):
         if legacy_location is None or not legacy_location.getAccessor():
             # Not configured in the legacy location either.
             continue
+        
+        excluded_locations = [
+            ftrack_api.symbol.UNMANAGED_LOCATION_ID,
+            ftrack_api.symbol.CONNECT_LOCATION_ID
+        ]
 
-        if location['id'] is not ftrack_api.symbol.UNMANAGED_LOCATION_ID:
+        if location['id'] is not in excluded_locations:
             logger.warning(
                 u'Location {0!r} does not have a configured '
                 u'accessor configured in {1!r}. Setting up proxy for legacy '
