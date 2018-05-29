@@ -7,6 +7,13 @@
 Release Notes
 *************
 
+.. release:: Upcoming
+
+    ..change:: fixed
+        :tags: location, compatibility
+
+        Remove warning for ftrack.connect location.
+
 .. release:: 0.3.1
     :date: 2017-06-28
     .. change:: fixed
