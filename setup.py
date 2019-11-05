@@ -4,11 +4,19 @@
 import os
 import re
 import shutil
-import pip
+
 import glob
 from setuptools import setup, find_packages, Command
 from setuptools.command.test import test as TestCommand
+from pkg_resources import parse_version
+import pip
 
+if parse_version(pip.__version__) < parse_version('19.3.0'):
+    raise ValueError('Pip should be version 19.3.0 or higher')
+
+from pip._internal import main as pip_main
+
+PLUGIN_NAME = 'ftrack-location-compatibility-{0}'
 
 ROOT_PATH = os.path.dirname(
     os.path.realpath(__file__)
@@ -32,7 +40,7 @@ BUILD_PATH = os.path.join(
 )
 
 STAGING_PATH = os.path.join(
-    BUILD_PATH, 'plugin'
+    BUILD_PATH, PLUGIN_NAME
 )
 
 # Read version from source.
@@ -43,6 +51,8 @@ with open(os.path.join(
         r'.*__version__ = \'(.*?)\'', _version_file.read(), re.DOTALL
     ).group(1)
 
+# Update staging path with the plugin version
+STAGING_PATH = STAGING_PATH.format(VERSION)
 
 class BuildPlugin(Command):
     '''Build plugin.'''
@@ -71,13 +81,12 @@ class BuildPlugin(Command):
             os.path.join(STAGING_PATH, 'hook')
         )
 
-        pip.main(
+        pip_main.main(
             [
                 'install',
                 '.',
                 '--target',
-                os.path.join(STAGING_PATH, 'package'),
-                '--process-dependency-links'
+                os.path.join(STAGING_PATH, 'package')
             ]
         )
 
@@ -124,7 +133,8 @@ configuration = dict(
     setup_requires=[
         'sphinx >= 1.2.2, < 2',
         'sphinx_rtd_theme >= 0.1.6, < 2',
-        'lowdown >= 0.1.0, < 1'
+        'lowdown @ https://bitbucket.org/ftrack/lowdown/get/0.1.0.zip'
+        '#egg=lowdown-0.1.0'
     ],
     tests_require=[
         'pytest >= 2.3.5, < 3',
@@ -134,12 +144,6 @@ configuration = dict(
         'test': PyTest,
         'build_plugin': BuildPlugin
     },
-    dependency_links=[
-        (
-            'https://bitbucket.org/ftrack/lowdown/get/0.1.0.zip'
-            '#egg=lowdown-0.1.0'
-        )
-    ],
 
     options={},
     zip_safe=False,

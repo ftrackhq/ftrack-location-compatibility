@@ -9,6 +9,16 @@ Release Notes
 
 .. release:: Upcoming
 
+    ..change:: changed
+        :tags: Setup
+
+        Build resultant folder renamed with the plugin name + version
+
+    ..change:: changed
+        :tags: Setup
+
+        Pip compatibility for version 19.3.0 or higher
+
     ..change:: fixed
         :tags: location, compatibility
 
