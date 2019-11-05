@@ -7,7 +7,8 @@
 Release Notes
 *************
 
-.. release:: Upcoming
+.. release:: 0.3.3
+    :date: 2019-11-05
 
     ..change:: changed
         :tags: Setup
