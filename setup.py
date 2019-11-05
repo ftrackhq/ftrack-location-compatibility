@@ -54,6 +54,7 @@ with open(os.path.join(
 # Update staging path with the plugin version
 STAGING_PATH = STAGING_PATH.format(VERSION)
 
+
 class BuildPlugin(Command):
     '''Build plugin.'''
 
@@ -86,7 +87,7 @@ class BuildPlugin(Command):
                 'install',
                 '.',
                 '--target',
-                os.path.join(STAGING_PATH, 'package')
+                os.path.join(STAGING_PATH, 'dependencies')
             ]
         )
 
