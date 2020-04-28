@@ -7,6 +7,13 @@
 Release Notes
 *************
 
+.. release:: Upcoming
+
+    ..change:: changed
+        :tags: Setup
+
+        Lock api version < 2.0.0
+
 .. release:: 0.3.3
     :date: 2019-11-05
 

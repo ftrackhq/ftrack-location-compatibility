@@ -141,7 +141,7 @@ configuration = dict(
     ],
     tests_require=[
         'pytest >= 2.3.5, < 3',
-        'ftrack-python-api'
+        'ftrack-python-api >= 1, < 2',
     ],
     cmdclass={
         'test': PyTest,
